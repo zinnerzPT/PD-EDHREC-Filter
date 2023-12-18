@@ -1,4 +1,4 @@
-# PD-EDHREC-Filter
+# PD EDHREC Filter
 This is a simple userscript that adds a toggle on the top right corner of the window in EDHREC to automatically hide cards that aren't legal in Penny Dreadful.
 
 # Instructions
