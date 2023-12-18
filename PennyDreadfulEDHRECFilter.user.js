@@ -1,15 +1,15 @@
 // ==UserScript==
-// @name         PD EDHREC Filter
+// @name         PennyDreadful EDHREC Filter
 // @namespace    zinnerzPT
 // @version      0.9
 // @description  Hides non-legal Penny Dreadful cards in EDHREC
 // @author       zinnerzPT
 // @match        https://edhrec.com/*
 // @grant        GM_xmlhttpRequest
-// @homepageURL  https://github.com/zinnerzPT/PD-EDHREC-Filter
-// @supportURL   https://github.com/zinnerzPT/PD-EDHREC-Filter/issues
-// @downloadURL  https://github.com/zinnerzPT/PD-EDHREC-Filter/raw/main/PD%20EDHREC%20Filter.user.js
-// @updateURL    https://github.com/zinnerzPT/PD-EDHREC-Filter/raw/main/PD%20EDHREC%20Filter.user.js
+// @homepageURL  https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter
+// @supportURL   https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter/issues
+// @downloadURL  https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter/raw/main/PennyDreadfulEDHRECFilter.user.js
+// @updateURL    https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter/raw/main/PennyDreadfulEDHRECFilter.user.js
 // ==/UserScript==
 
 (function() {
