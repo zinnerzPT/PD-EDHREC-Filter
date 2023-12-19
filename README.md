@@ -7,5 +7,8 @@ This is a simple userscript that adds a toggle on the top right corner of the wi
 3. Enjoy!
 
 # Change Log
- * *Version 0.9.0*
+ * *Version 0.11*
+     * Added support for Table and Text views
+
+ * *Version 0.9*
      * Initial commit

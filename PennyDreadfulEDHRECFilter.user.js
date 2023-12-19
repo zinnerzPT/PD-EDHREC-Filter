@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PennyDreadful EDHREC Filter
 // @namespace    zinnerzPT
-// @version      0.9
+// @version      0.11
 // @description  Hides non-legal Penny Dreadful cards in EDHREC
 // @author       zinnerzPT
 // @match        https://edhrec.com/*
@@ -17,8 +17,8 @@
 
     let legalCardNames;
 
-    // Hides cards based on names and the current toggle state
-    function hideCardsByNames(hideCards) {
+    // Hides cards in card view
+    function hideCardsInCardView(hideCards) {
         const cardWrappers = document.querySelectorAll('[class*="CardView_cardWrapper"]');
         cardWrappers.forEach(cardWrapper => {
             let nameWrapper = cardWrapper.querySelector('[class*="Card_name"]');
@@ -29,8 +29,36 @@
                 const cardName = nameWrapper.textContent.trim();
                 const isLegal = legalCardNames.includes(cardName);
                 const shouldHide = hideCards ? !isLegal : false;
-                cardWrapper.style.display = shouldHide ? 'none' : 'block';
+                cardWrapper.classList.toggle('hidden-card', shouldHide);
             }
+        });
+    }
+
+    // Hides cards in table view
+    function hideCardsInTableView(hideCards) {
+        const tableRows = document.querySelectorAll('.TableView_tableBody__fnXV9.edhrec-clipboard-dont-close tr');
+        tableRows.forEach(row => {
+            const cardNameElement = row.querySelector('.TableView_tableBody__fnXV9.edhrec-clipboard-dont-close a');
+            if (cardNameElement) {
+                const cardName = cardNameElement.textContent.trim();
+                const isLegal = legalCardNames.includes(cardName);
+                const shouldHide = hideCards ? !isLegal : false;
+                row.classList.toggle('hidden-card', shouldHide);
+            }
+        });
+    }
+    
+    // Hides cards in text view
+    function hideCardsInTextView(hideCards) {
+        const cardSections = document.querySelectorAll('[class*="TextView_textSection"]');
+        cardSections.forEach(cardSection => {
+            const cardLinks = cardSection.querySelectorAll('a');
+            cardLinks.forEach(cardLink => {
+                const cardName = cardLink.textContent.trim();
+                const isLegal = legalCardNames.includes(cardName);
+                const shouldHide = hideCards ? !isLegal : false;
+                cardLink.parentNode.parentNode.classList.toggle('hidden-card', shouldHide);
+            });
         });
     }
 
@@ -48,7 +76,9 @@
             hideCards = !hideCards;
             localStorage.setItem('hideCardsToggle', hideCards);
             toggleSwitch.checked = hideCards;
-            hideCardsByNames(hideCards);
+            hideCardsInCardView(hideCards);
+            hideCardsInTableView(hideCards)
+            hideCardsInTextView(hideCards);
         });
         toggleContainer.appendChild(toggleButton);
         navbar.appendChild(toggleContainer);
@@ -61,11 +91,15 @@
             if (response.status === 200) {
                 legalCardNames = response.responseText.split('\n').map(name => name.trim());
                 let hideCards = localStorage.getItem('hideCardsToggle') === 'true';
-                hideCardsByNames(hideCards);
+                hideCardsInCardView(hideCards);
+                hideCardsInTableView(hideCards);
+                hideCardsInTextView(hideCards)
                 createToggleButton(hideCards);
                 window.addEventListener('scroll', function() {
                     if (localStorage.getItem('hideCardsToggle') === 'true') {
-                        hideCardsByNames(true);
+                        hideCardsInCardView(true);
+                        hideCardsInTableView(true);
+                        hideCardsInTextView(true)
                     }
                 });
             } else {
@@ -73,4 +107,13 @@
             }
         }
     });
+
+     // Add the following CSS style for the hidden-card class
+     const style = document.createElement('style');
+     style.textContent = `
+         .hidden-card {
+             display: none !important;
+         }
+     `;
+     document.head.appendChild(style);
 })();
