@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PennyDreadful EDHREC Filter
 // @namespace    zinnerzPT
-// @version      0.11
+// @version      0.12
 // @description  Hides non-legal Penny Dreadful cards in EDHREC
 // @author       zinnerzPT
 // @match        https://edhrec.com/*
@@ -19,7 +19,7 @@
 
     // Hides cards in card view
     function hideCardsInCardView(hideCards) {
-        const cardWrappers = document.querySelectorAll('[class*="CardView_cardWrapper"]');
+        const cardWrappers = document.querySelectorAll('[class*="Card_container"]');
         cardWrappers.forEach(cardWrapper => {
             let nameWrapper = cardWrapper.querySelector('[class*="Card_name"]');
             if (!nameWrapper) {
@@ -29,7 +29,7 @@
                 const cardName = nameWrapper.textContent.trim();
                 const isLegal = legalCardNames.includes(cardName);
                 const shouldHide = hideCards ? !isLegal : false;
-                cardWrapper.classList.toggle('hidden-card', shouldHide);
+                cardWrapper.parentNode.classList.toggle('hidden-card', shouldHide);
             }
         });
     }
