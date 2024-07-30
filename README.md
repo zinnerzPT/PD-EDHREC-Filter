@@ -7,6 +7,9 @@ This is a simple userscript that adds a toggle on the top right corner of the wi
 3. Enjoy!
 
 # Change Log
+ * *Version 0.12*
+     * Fixed issue with script not working after EDHREC updated page structure
+
  * *Version 0.11*
      * Added support for Table and Text views
 
