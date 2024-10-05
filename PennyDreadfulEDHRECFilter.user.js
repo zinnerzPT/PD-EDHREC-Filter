@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         PennyDreadful EDHREC Filter
 // @namespace    zinnerzPT
-// @version      0.12
+// @version      0.13
 // @description  Hides non-legal Penny Dreadful cards in EDHREC
 // @author       zinnerzPT
 // @match        https://edhrec.com/*
-// @grant        GM_xmlhttpRequest
+// @grant        none
 // @homepageURL  https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter
 // @supportURL   https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter/issues
 // @downloadURL  https://github.com/zinnerzPT/PennyDreadfulEDHRECFilter/raw/main/PennyDreadfulEDHRECFilter.user.js
@@ -47,7 +47,7 @@
             }
         });
     }
-    
+
     // Hides cards in text view
     function hideCardsInTextView(hideCards) {
         const cardSections = document.querySelectorAll('[class*="TextView_textSection"]');
@@ -77,43 +77,43 @@
             localStorage.setItem('hideCardsToggle', hideCards);
             toggleSwitch.checked = hideCards;
             hideCardsInCardView(hideCards);
-            hideCardsInTableView(hideCards)
+            hideCardsInTableView(hideCards);
             hideCardsInTextView(hideCards);
         });
         toggleContainer.appendChild(toggleButton);
         navbar.appendChild(toggleContainer);
     }
 
-    GM_xmlhttpRequest({
-        method: 'GET',
-        url: 'http://pdmtgo.com/legal_cards.txt',
-        onload: function(response) {
-            if (response.status === 200) {
-                legalCardNames = response.responseText.split('\n').map(name => name.trim());
-                let hideCards = localStorage.getItem('hideCardsToggle') === 'true';
-                hideCardsInCardView(hideCards);
-                hideCardsInTableView(hideCards);
-                hideCardsInTextView(hideCards)
-                createToggleButton(hideCards);
-                window.addEventListener('scroll', function() {
-                    if (localStorage.getItem('hideCardsToggle') === 'true') {
-                        hideCardsInCardView(true);
-                        hideCardsInTableView(true);
-                        hideCardsInTextView(true)
-                    }
-                });
-            } else {
-                console.error('Failed to fetch legal card names');
-            }
-        }
-    });
+    // Use a CORS proxy to fetch the file over HTTPS
+    const proxyUrl = 'https://corsproxy.io/?';
+    const targetUrl = 'http://pdmtgo.com/legal_cards.txt';
 
-     // Add the following CSS style for the hidden-card class
-     const style = document.createElement('style');
-     style.textContent = `
-         .hidden-card {
-             display: none !important;
-         }
-     `;
-     document.head.appendChild(style);
+    // Use the Fetch API with HTTPS URL
+    fetch(proxyUrl + targetUrl)
+        .then(response => response.text())
+        .then(data => {
+            legalCardNames = data.split('\n').map(name => name.trim());
+            let hideCards = localStorage.getItem('hideCardsToggle') === 'true';
+            hideCardsInCardView(hideCards);
+            hideCardsInTableView(hideCards);
+            hideCardsInTextView(hideCards);
+            createToggleButton(hideCards);
+            window.addEventListener('scroll', function() {
+                if (localStorage.getItem('hideCardsToggle') === 'true') {
+                    hideCardsInCardView(true);
+                    hideCardsInTableView(true);
+                    hideCardsInTextView(true);
+                }
+            });
+        })
+        .catch(error => console.error('Failed to fetch legal card names:', error));
+
+    // Add the following CSS style for the hidden-card class
+    const style = document.createElement('style');
+    style.textContent = `
+        .hidden-card {
+            display: none !important;
+        }
+    `;
+    document.head.appendChild(style);
 })();
