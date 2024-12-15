@@ -7,6 +7,9 @@ This is a simple userscript that adds a toggle on the top right corner of the wi
 3. Enjoy!
 
 # Change Log
+ * *Version 0.14*
+     * Updated CORS Proxy url
+
  * *Version 0.13*
      * Hopefully fixed Manifest v3 breaking changes
 
